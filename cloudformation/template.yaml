@@ -46,7 +46,6 @@ Parameters:
   DevPortalCustomersTableName:
     Type: String
     Description: The name of the DynamoDB Customers table.
-    Default: "DevPortalCustomers"
 
   StaticAssetRebuildToken:
     Type: String
@@ -61,12 +60,12 @@ Parameters:
   MarketplaceSubscriptionTopicProductCode:
     Type: String
     Description: The marketplace SNS topic suffix for subscription/unsubscription events
-    Default: "DevPortalMarketplaceSubscriptionTopic"
+    #Default: "DevPortalMarketplaceSubscriptionTopic"
 
   CognitoIdentityPoolName:
     Type: String
     Description: The name for your Cognito Identity Pool.
-    Default: "DevPortalUserPool"
+    #Default: "DevPortalUserPool"
 
   CognitoDomainNameOrPrefix:
     Type: String
