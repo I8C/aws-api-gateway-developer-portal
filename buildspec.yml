@@ -31,7 +31,7 @@ phases:
       #- sam build --use-container
       
       # Package Application
-      - aws cloudformation package --template ./cloudformation/template.yml --s3-bucket $S3_BUCKET --output-template template-export.yml
+      - aws cloudformation package --template ./cloudformation/template.yaml --s3-bucket $S3_BUCKET --output-template template-export.yml
 artifacts:
   files:
     - template-export.yml
