@@ -1,0 +1,279 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: "Template creates a CI and a seperate CD pipeline in AWS CodePipeline. One is triggered by the development branch and the other by the master branch"
+Parameters:
+    
+    AppName:
+        Type: String
+        Description: Name of the application
+        MinLength: "1"
+        MaxLength: "80"
+        AllowedPattern: "[a-z0-9-]+"
+        ConstraintDescription: Malformed input parameter. AppName must only contain lower case letters, numbers, and -.
+      
+    GitHubOAuthToken: 
+        Description: Create a token with 'repo' and 'admin:repo_hook' permissions here https://github.com/settings/tokens
+        Type: String
+
+    GitHubUser:
+        Description: Enter GitHub username of the repository owner
+        Type: String
+        Default: I8C
+
+    GitHubRepository:
+        Description: Enter the repository name that should be monitored for changes
+        Type: String
+        Default: aws-api-gateway-developer-portal
+
+    GitHubBranch:
+        Description: Enter the GitHub branch to monitored
+        Type: String
+        Default: master
+      
+Resources:
+  
+  S3BucketCD:
+    Description: Creating S3 Bucket for AWS CodePipeline CD artifacts
+    Type: AWS::S3::Bucket
+    DeletionPolicy: Delete
+    Properties:
+      BucketName: !Sub "${AppName}-cd-bucket"
+      VersioningConfiguration:
+        Status: Enabled
+  
+  CodeBuildCDProject:
+    DependsOn: [S3BucketCD]
+    Description: Creating AWS CodeBuild project
+    Type: AWS::CodeBuild::Project
+    Properties:
+      Artifacts:
+        Type: CODEPIPELINE
+      Description: !Sub "Building stage for ${AppName}."
+      Environment:
+        ComputeType: BUILD_GENERAL1_SMALL
+        EnvironmentVariables:
+          - Name: S3_BUCKET
+            Value: !Ref S3BucketCD
+        #Image: "aws/codebuild/eb-nodejs-6.10.0-amazonlinux-64:4.0.0"
+        Image: "aws/codebuild/nodejs:8.11.0"
+        Type: LINUX_CONTAINER
+      Name: !Sub "${AppName}-CD-build"
+      ServiceRole: !Ref CodeBuildTrustRole
+      Source:
+        Type: CODEPIPELINE
+      Tags:
+        - Key: app-name
+          Value: !Ref AppName
+  
+  CodePipelineCDProject:
+    DependsOn: [S3BucketCD, CodeBuildCDProject]
+    Description: Creating a continious delivery pipeline for your project in AWS CodePipeline
+    Type: AWS::CodePipeline::Pipeline
+    Properties:
+      Name: !Sub "${AppName}-CD-pipeline"
+      RoleArn: !GetAtt CodePipelineTrustRole.Arn
+      ArtifactStore:
+        Type: S3
+        Location: !Ref S3BucketCD
+      Stages:
+      - Name: Source
+        Actions:
+        - Name: GitHub
+          InputArtifacts: []
+          ActionTypeId:
+            Version: "1"
+            Category: Source
+            Owner: ThirdParty
+            Provider: GitHub
+          OutputArtifacts:
+          - Name: !Sub "${AppName}-CD-SourceArtifact"
+          RunOrder: 1
+          Configuration:
+            Owner: !Ref GitHubUser
+            Branch: !Ref GitHubBranch
+            Repo: !Ref GitHubRepository
+            OAuthToken: !Ref GitHubOAuthToken
+      - Name: Build
+        Actions:
+        - Name: build-from-source
+          InputArtifacts:
+          - Name: !Sub "${AppName}-CD-SourceArtifact"
+          ActionTypeId:
+            Category: Build
+            Owner: AWS
+            Version: "1"
+            Provider: CodeBuild
+          OutputArtifacts:
+          - Name: !Sub "${AppName}-CD-BuildArtifact"
+          Configuration:
+            ProjectName: !Sub "${AppName}-CD-build"
+          RunOrder: 1
+      - Name: DeployToPROD
+        Actions:
+        - Name: create-changeset
+          InputArtifacts:
+          - Name: !Sub "${AppName}-CD-BuildArtifact"
+          ActionTypeId:
+            Category: Deploy
+            Owner: AWS
+            Version: "1"
+            Provider: CloudFormation
+          OutputArtifacts: []
+          Configuration:
+            StackName: !Sub "${AppName}-PROD-stack"
+            ActionMode: CHANGE_SET_REPLACE
+            RoleArn: !GetAtt CloudFormationTrustRole.Arn
+            ChangeSetName: pipeline-changeset
+            Capabilities: CAPABILITY_NAMED_IAM
+            TemplatePath: !Sub "${AppName}-CD-BuildArtifact::template-export.yml"
+            TemplateConfiguration: !Sub "${AppName}-CD-BuildArtifact::prod.json"
+          RunOrder: 1
+        - Name: execute-changeset
+          InputArtifacts: []
+          ActionTypeId:
+            Category: Deploy
+            Owner: AWS
+            Version: "1"
+            Provider: CloudFormation
+          OutputArtifacts: []
+          Configuration:
+            StackName: !Sub "${AppName}-PROD-stack"
+            ActionMode: CHANGE_SET_EXECUTE
+            ChangeSetName: pipeline-changeset
+          RunOrder: 2
+        
+# ---------------------------------------------------------------- #          
+#   IAM Roles
+# ---------------------------------------------------------------- #
+
+  CodeBuildTrustRole:
+    Description: Creating service role in IAM for AWS CodeBuild
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub "${AppName}-codebuild-role"
+      AssumeRolePolicyDocument:
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service: [codebuild.amazonaws.com]
+          Action: sts:AssumeRole
+      Path: /
+  CodeBuildRolePolicy:
+    Type: AWS::IAM::Policy
+    DependsOn: CodeBuildTrustRole
+    Description: Setting IAM policy for the service role for AWS CodeBuild
+    Properties:
+      PolicyName: CodeBuildRolePolicy
+      PolicyDocument:
+        Statement:
+        - Effect: Allow
+          Action: ["logs:CreateLogGroup", "logs:CreateLogStream", "logs:PutLogEvents"]
+          Resource: ["*"]
+        - Effect: Allow
+          Resource: ["*"]
+          Action: ["s3:*"]
+        - Effect: Allow
+          Resource: ["*"]
+          Action: ["kms:GenerateDataKey*", "kms:Encrypt", "kms:Decrypt"]
+        - Effect: Allow
+          Resource: ["*"]
+          Action: ["sns:SendMessage"]
+      Roles: [!Ref CodeBuildTrustRole]
+  CodePipelineTrustRole:
+    Description: Creating service role in IAM for AWS CodePipeline
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub "${AppName}-codepipeline-role"
+      AssumeRolePolicyDocument:
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service: [codepipeline.amazonaws.com]
+          Action: sts:AssumeRole
+      Path: /
+  CodePipelineRolePolicy:
+    Type: AWS::IAM::Policy
+    DependsOn: CodePipelineTrustRole
+    Description: Setting IAM policy for the service role for AWS CodePipeline
+    Properties:
+      PolicyName: CodePipelineRolePolicy
+      PolicyDocument:
+        Statement:
+        - Action: ["s3:GetObject", "s3:GetObjectVersion", "s3:GetBucketVersioning"]
+          Resource: "*"
+          Effect: Allow
+        - Action: ["s3:PutObject"]
+          Resource: ["arn:aws:s3:::codepipeline*"]
+          Effect: Allow
+        - Action: ["codebuild:StartBuild", "codebuild:BatchGetBuilds"]
+          Resource: "*"
+          Effect: Allow
+        - Action: ["cloudwatch:*", "s3:*", "sns:*", "cloudformation:*", "rds:*", "sqs:*", "iam:PassRole"]
+          Resource: "*"
+          Effect: Allow
+        - Action: ["lambda:InvokeFunction", "lambda:ListFunctions"]
+          Resource: "*"
+          Effect: Allow
+      Roles: [!Ref CodePipelineTrustRole]
+  CloudFormationTrustRole:
+    Description: Creating service role in IAM for AWS CloudFormation
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub "${AppName}-cloudformation-role"
+      AssumeRolePolicyDocument:
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service: [cloudformation.amazonaws.com]
+          Action: sts:AssumeRole
+      Path: /
+  CloudFormationRolePolicy:
+    Type: AWS::IAM::Policy
+    DependsOn: CloudFormationTrustRole
+    Description: Setting IAM policy for the service role for AWS CloudFormation
+    Properties:
+      PolicyName: CloudFormationRolePolicy
+      PolicyDocument:
+        Statement:
+        - Action: ["s3:GetObject", "s3:GetObjectVersion", "s3:GetBucketVersioning"]
+          Resource: "*"
+          Effect: Allow
+        - Action: ["s3:PutObject"]
+          Resource: ["arn:aws:s3:::codepipeline*"]
+          Effect: Allow
+        - Action: ["lambda:*"]
+          Resource: ["*"]
+          Effect: Allow
+        - Action: ["apigateway:*"]
+          Resource: !Sub "arn:aws:apigateway:${AWS::Region}::*"
+          Effect: Allow
+        - Action: ["iam:GetRole", "iam:CreateRole", "iam:DeleteRole"]
+          Resource: !Sub "arn:aws:iam::${AWS::AccountId}:role/${AppName}-*"
+          Effect: Allow
+        - Action: ["iam:AttachRolePolicy", "iam:DetachRolePolicy"]
+          Resource: !Sub "arn:aws:iam::${AWS::AccountId}:role/${AppName}-*"
+          Effect: Allow
+        - Action: ["iam:*"]
+          Resource: ["*"]
+          Effect: Allow
+        - Action: ["dynamodb:*"]
+          Resource: ["*"]
+          Effect: Allow
+        - Action: ["cloudformation:CreateChangeSet"]
+          Resource: !Sub "arn:aws:cloudformation:${AWS::Region}:aws:transform/Serverless-2016-10-31"
+          Effect: Allow
+        - Action: ["codedeploy:*"]
+          Resource: "*"
+          Effect: Allow
+        - Action: ["s3:*"]
+          Resource: ["*"]
+          Effect: Allow
+        - Action: ["cloudformation:CreateChangeSet"]
+          Resource: ["*"]
+          Effect: Allow
+      Roles: [!Ref CloudFormationTrustRole]
+      
+Outputs:
+  S3BucketCDURL:
+    Description: Information about the value
+    Value: !Ref S3BucketCD
+  

@@ -1,0 +1,10 @@
+[
+  {
+      "ParameterKey": "AppName",
+      "ParameterValue": "awsteam-serverless-portal"
+  },
+  {
+      "ParameterKey": "GitHubOAuthToken",
+      "ParameterValue": ""
+  }
+]

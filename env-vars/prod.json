@@ -1,0 +1,6 @@
+{
+    "Parameters": {
+        "DevPortalSiteS3BucketName": "awsteam-prod-serverless-portal",
+        "ArtifactsS3BucketName": "awsteam-prod-serverless-portal-artifacts"
+    }
+}

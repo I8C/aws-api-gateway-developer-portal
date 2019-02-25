@@ -1,0 +1,38 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+
+      # Upgrade AWS CLI to the latest version
+      - pip install --upgrade awscli
+
+  pre_build:
+    commands:
+      - node --version
+      - npm --version
+      - sam --version
+      - aws --version
+      # Discover and run unit tests in the 'tests' directory. For more information, see <https://docs.python.org/3/library/unittest.html#test-discovery>
+      #- python -m unittest discover tests
+  
+  build:
+    commands:
+      - cd dev-portal
+      - npm install
+      - cd ..
+      - npm install --only=dev
+
+      # Validate SAM Template
+      #- sam validate
+      
+      # Build Application
+      #- sam build --use-container
+      
+      # Package Application
+      - aws cloudformation package --template ./cloudformation/template.yml --s3-bucket $S3_BUCKET --output-template template-export.yml
+artifacts:
+  files:
+    - template-export.yml
+    - env-vars/prod.json
+  discard-paths: yes
