@@ -4,7 +4,7 @@
         "ArtifactsS3BucketName": "awsteam-prod-serverless-portal-artifacts",
         "DevPortalCustomersTableName": "awsteam-prod-serverless-portal-customers",
         "MarketplaceSubscriptionTopicProductCode": "awsteam-prod-serverless-marketplace-subscription-topic",
-        "CognitoIdentityPoolName": "awsteam-prod-serverless-portal-users"
+        "CognitoIdentityPoolName": "awsteamProdServerlessPortalUsers"
         
     }
 }
