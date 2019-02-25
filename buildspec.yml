@@ -20,7 +20,7 @@ phases:
       - npm install --only=dev
       
       - npm test
-      - aws cloudformation validate-template --template-body file://cloudformation/template.yaml
+      #- aws cloudformation validate-template --template-body file://cloudformation/template.yaml
       
   post_build:
     commands:

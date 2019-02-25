@@ -53,7 +53,6 @@ Resources:
         EnvironmentVariables:
           - Name: S3_BUCKET
             Value: !Ref S3BucketCD
-        #Image: "aws/codebuild/eb-nodejs-6.10.0-amazonlinux-64:4.0.0"
         Image: "aws/codebuild/nodejs:8.11.0"
         Type: LINUX_CONTAINER
       Name: !Sub "${AppName}-CD-build"
@@ -177,6 +176,9 @@ Resources:
         - Effect: Allow
           Resource: ["*"]
           Action: ["sns:SendMessage"]
+        - Effect: Allow
+          Resource: ["*"]
+          Action: ["cloudformation:ValidateTemplate"]
       Roles: [!Ref CodeBuildTrustRole]
   CodePipelineTrustRole:
     Description: Creating service role in IAM for AWS CodePipeline
