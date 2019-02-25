@@ -8,3 +8,10 @@ aws cloudformation create-stack \
 --stack-name $STACK_NAME \
 --parameters file://params.json \
 --capabilities CAPABILITY_NAMED_IAM
+
+
+aws cloudformation update-stack \
+--template-body file://cfn-cicd-template.yaml \
+--stack-name $STACK_NAME \
+--parameters file://params.json \
+--capabilities CAPABILITY_NAMED_IAM

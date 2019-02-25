@@ -270,6 +270,15 @@ Resources:
         - Action: ["cloudformation:CreateChangeSet"]
           Resource: ["*"]
           Effect: Allow
+        - Action: ["cloudfront:*"]
+          Resource: ["*"]
+          Effect: Allow
+        - Action: ["cognito-idp:*"]
+          Resource: ["*"]
+          Effect: Allow
+        - Action: ["cognito-identity:*"]
+          Resource: ["*"]
+          Effect: Allow
       Roles: [!Ref CloudFormationTrustRole]
       
 Outputs:
