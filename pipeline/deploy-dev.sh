@@ -1,8 +1,8 @@
 #!/bin/bash
 export S3_DEV_BUCKET=awsteam-development-build-assets
-export S3_PORTAL_ARTIFACTS=awsteam-samuel-development-serverless-portal-artifacts-bucket
-export STACK_NAME=awsteam-samuel-development-stack
-export DevPortalSiteS3BucketName=awsteam-samuel-development-serverless-portal
+export S3_PORTAL_ARTIFACTS=awsteam-dewanst-development-serverless-portal-artifacts-bucket
+export STACK_NAME=awsteam-dewanst-development-stack
+export DevPortalSiteS3BucketName=awsteam-dewanst-development-serverless-portal
 export StaticAssetRebuildToken=$(date +'+%d%m%Y%H%M%S')
 export StaticAssetRebuildMode='overwrite-content'
 

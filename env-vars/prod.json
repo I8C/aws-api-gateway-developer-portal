@@ -4,8 +4,8 @@
         "ArtifactsS3BucketName": "awsteam-prod-serverless-portal-artifacts",
         "DevPortalCustomersTableName": "awsteam-prod-serverless-portal-customers",
         "MarketplaceSubscriptionTopicProductCode": "awsteam-prod-serverless-marketplace-subscription-topic",
-        "CognitoIdentityPoolName": "awsteamProdServerlessPortalUsers"
-        "StaticAssetRebuildToken" : "DefaultAssetRebuildToken" 
+        "CognitoIdentityPoolName": "awsteamProdServerlessPortalUsers",
+        "StaticAssetRebuildToken" : "DefaultAssetRebuildToken", 
         "StaticAssetRebuildMode" : "overwrite-content"
     }
 }
