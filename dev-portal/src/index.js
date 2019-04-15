@@ -6,22 +6,22 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom'
 
 // content-fragments (import here to start this ASAP)
-import 'services/get-fragments'
+import './services/get-fragments'
 
 // semantic-ui
 import 'semantic-ui-css/semantic.css'
 
 // pages
-import Home from 'pages/Home'
-import GettingStarted from 'pages/GettingStarted'
-import Dashboard from 'pages/Dashboard'
-import Apis from 'pages/Apis'
+import Home from './pages/Home'
+import GettingStarted from './pages/GettingStarted'
+import Dashboard from './pages/Dashboard'
+import Apis from './pages/Apis'
 
 // components
-import AlertPopup from 'components/AlertPopup'
-import NavBar from 'components/NavBar'
+import AlertPopup from './components/AlertPopup'
+import NavBar from './components/NavBar'
 
-import { init, login, logout } from 'services/self'
+import { init, login, logout } from './services/self'
 import './index.css';
 
 class App extends React.Component {

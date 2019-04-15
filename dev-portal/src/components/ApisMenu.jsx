@@ -9,7 +9,7 @@ import { Menu, Loader } from 'semantic-ui-react'
 
 // store
 import { observer } from 'mobx-react'
-import { store } from 'services/state'
+import { store } from '../services/state'
 
 // utilities
 import _ from 'lodash'

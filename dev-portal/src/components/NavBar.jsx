@@ -5,13 +5,13 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { Menu, Image } from 'semantic-ui-react'
 
-import { isAuthenticated, logout } from 'services/self'
+import { isAuthenticated, logout } from '../services/self'
 
 // mobx
 import { observer } from 'mobx-react'
 
 // fragments
-import { fragments } from 'services/get-fragments'
+import { fragments } from '../services/get-fragments'
 
 // components
 import SignIn from './SignIn'
@@ -23,8 +23,8 @@ import { cognitoDomain, cognitoClientId } from '../services/api'
 export const NavBar = observer(() => {
   return (
     <Menu inverted borderless attached style={{ flex: "0 0 auto" }}>
-      <Menu.Item as={Link} to="/">
-        <Image size='mini' src="/custom-content/nav-logo.png" style={{ paddingRight: "10px" }} />
+      <Menu.Item as={Link} to="/" className='custom-item-title'>
+        <Image size='mini' src="/custom-content/nav-logo.png" style={{ paddingRight: "10px" }} className='custom-navbar-image'/>
         {fragments.Home.title}
       </Menu.Item>
 

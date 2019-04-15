@@ -4,7 +4,7 @@
 import { observable, reaction } from 'mobx'
 import _ from 'lodash'
 
-import { getSubscribedUsagePlan } from 'services/api-catalog'
+import { getSubscribedUsagePlan } from './api-catalog'
 
 /**
  * A function that returns a new object contain the default store

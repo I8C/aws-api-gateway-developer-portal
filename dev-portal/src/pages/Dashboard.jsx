@@ -6,12 +6,12 @@ import React from 'react'
 import { Grid, Header, Popup, Loader, Message, List, Divider } from 'semantic-ui-react'
 
 import Chart from 'chart.js'
-import { fetchUsage, mapUsageByDate } from 'services/api-catalog'
-import { toTitleCase } from 'services/misc'
+import { fetchUsage, mapUsageByDate } from '../services/api-catalog'
+import { toTitleCase } from '../services/misc'
 
 import { observer } from 'mobx-react'
 
-import { store } from 'services/state'
+import { store } from '../services/state'
 
 import _ from 'lodash'
 

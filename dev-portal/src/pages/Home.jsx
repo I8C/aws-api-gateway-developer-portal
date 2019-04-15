@@ -7,7 +7,7 @@ import React from 'react'
 import { observer } from 'mobx-react'
 
 // fragments
-import { fragments } from 'services/get-fragments'
+import { fragments } from '../services/get-fragments'
 
 // react-router
 import { Link } from 'react-router-dom'
@@ -17,8 +17,7 @@ import { Header, Segment, Container, Image, Button } from 'semantic-ui-react'
 
 export const HomePage = observer(() => (
   <React.Fragment>
-    <Segment vertical textAlign='center' style={{ color: "whitesmoke", backgroundColor: "slategray", padding: "40px 0px", margin: "0px !important" }}>
-      <Image centered size='small' src='/custom-content/home-image.png' />
+    <Segment vertical textAlign='center' style={{ color: "whitesmoke", backgroundColor: "slategray", padding: "40px 0px", margin: "0px !important" }} className='custom-background-image'>
       <Header as='h1' style={{ color: "whitesmoke" }}>{fragments.Home.header}</Header>
       <p>{fragments.Home.tagline}</p>
       <Link to="/getting-started"><Button positive>{fragments.Home.gettingStartedButton}</Button></Link>

@@ -4,7 +4,7 @@
 import React from 'react'
 import { Modal, Dropdown, Message, Button } from 'semantic-ui-react'
 import Chart from 'chart.js'
-import { fetchUsage, mapUsageByDate } from 'services/api-catalog'
+import { fetchUsage, mapUsageByDate } from '../services/api-catalog'
 
  export default class Usage extends React.Component {
    state = {

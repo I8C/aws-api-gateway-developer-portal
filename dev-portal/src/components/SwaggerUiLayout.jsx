@@ -7,12 +7,12 @@ import React from 'react'
 import { Button, Header, Image, Container } from 'semantic-ui-react'
 
 // services
-import { subscribe, unsubscribe } from 'services/api-catalog'
-import { isAuthenticated } from 'services/self'
+import { subscribe, unsubscribe } from '../services/api-catalog'
+import { isAuthenticated } from '../services/self'
 
 // state
 import { observer } from 'mobx-react'
-import { store } from 'services/state.js'
+import { store } from '../services/state.js'
 
 // Create the plugin that provides our layout component
 export const SwaggerLayoutPlugin = () => ({ components: { InfoContainer: InfoReplacement } })

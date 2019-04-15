@@ -11,15 +11,15 @@ import 'swagger-ui/dist/swagger-ui.css'
 import { Container, Header, Icon } from 'semantic-ui-react'
 
 // services
-import { getApi } from 'services/api-catalog'
-import { isAuthenticated } from 'services/self'
+import { getApi } from '../services/api-catalog'
+import { isAuthenticated } from '../services/self'
 
 // components
-import ApisMenu from 'components/ApisMenu'
-import SwaggerLayoutPlugin from 'components/SwaggerUiLayout'
+import ApisMenu from '../components/ApisMenu'
+import SwaggerLayoutPlugin from '../components/SwaggerUiLayout'
 
 // state
-import { store } from 'services/state.js'
+import { store } from '../services/state.js'
 import { observer } from 'mobx-react'
 
 export default observer(class ApisPage extends React.Component {

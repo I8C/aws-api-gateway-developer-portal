@@ -7,7 +7,7 @@ import React from 'react'
 import { observer } from 'mobx-react'
 
 // fragments
-import { fragments } from 'services/get-fragments'
+import { fragments } from '../services/get-fragments'
 
 // semantic-ui
 import { Container } from 'semantic-ui-react'

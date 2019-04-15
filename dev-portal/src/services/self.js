@@ -5,9 +5,9 @@ import AWS from 'aws-sdk'
 import { CognitoUserPool, CognitoUser, AuthenticationDetails } from 'amazon-cognito-identity-js'
 
 // services
-import { store } from 'services/state'
-import { updateAllUserData } from 'services/api-catalog'
-import { initApiGatewayClient, apiGatewayClient, cognitoDomain, cognitoIdentityPoolId, cognitoUserPoolId, cognitoClientId, cognitoRegion } from 'services/api'
+import { store } from './state'
+import { updateAllUserData } from './api-catalog'
+import { initApiGatewayClient, apiGatewayClient, cognitoDomain, cognitoIdentityPoolId, cognitoUserPoolId, cognitoClientId, cognitoRegion } from './api'
 
 const poolData = {
   UserPoolId: cognitoUserPoolId,

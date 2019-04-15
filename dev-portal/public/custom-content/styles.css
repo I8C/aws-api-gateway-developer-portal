@@ -3,3 +3,18 @@
 Add your custom styling here. Note that styling in the source is loaded AFTER this sheet, and has higher priority. Make sure your styles here don't collide with source styles.
 
 */
+.custom-item-title{
+    text-shadow: 1px 1px gray!important;
+}
+
+.custom-navbar-image{
+    width: 50px!important;
+}
+
+.custom-background-image {
+  width:100%!important;
+  min-height:calc(100% - 100px)!important;
+  background-image: url('/custom-content/home-image.png')!important;
+  background-size: cover!important;
+  background-attachment:fixed!important;
+}
