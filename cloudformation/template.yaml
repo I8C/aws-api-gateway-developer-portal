@@ -53,8 +53,6 @@ Parameters:
   DevPortalCustomersTableName:
     Type: String
     Description: The name of the DynamoDB Customers table.
-<<<<<<< HEAD
-=======
     Default: 'DevPortalCustomers'
 
   DevPortalAdminEmail:
@@ -66,7 +64,6 @@ Parameters:
     Type: String
     Description: The name of the DynamoDB table storing feedback submitted by users.
     Default: 'DevPortalFeedback'
->>>>>>> aws/master
 
   StaticAssetRebuildToken:
     Type: String
@@ -81,20 +78,12 @@ Parameters:
   MarketplaceSubscriptionTopicProductCode:
     Type: String
     Description: The marketplace SNS topic suffix for subscription/unsubscription events
-<<<<<<< HEAD
-    #Default: "DevPortalMarketplaceSubscriptionTopic"
-=======
     Default: DevPortalMarketplaceSubscriptionTopic
->>>>>>> aws/master
 
   CognitoIdentityPoolName:
     Type: String
     Description: The name for your Cognito Identity Pool.
-<<<<<<< HEAD
-    #Default: "DevPortalUserPool"
-=======
     Default: 'DevPortalIdentityPool'
->>>>>>> aws/master
 
   CognitoDomainNameOrPrefix:
     Type: String
