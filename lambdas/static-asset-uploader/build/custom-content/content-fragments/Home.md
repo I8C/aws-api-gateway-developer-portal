@@ -1,7 +1,7 @@
 ---
 title: Developer Portal
-header: Developer Portal
-tagline: Your gateway to the data.
+header: Serverless Developer portal
+tagline: DEMO
 gettingStartedButton: Get Started
 apiListButton: Our APIs
 ---
@@ -16,21 +16,17 @@ Sign in to manage your subscriptions, see your current usage, get your API Key, 
 
 [<button class="ui button">I8C SHAREPOINT</button>](https://cronos.sharepoint.com/teams/I8C/FastTracks/aws/SitePages/Home.aspx)[<button class="ui button">I8C GITLAB</button>](https://gitlab.com/i8c/aws/)
 
-### THE SERVERLESS DEVELOPER PORTAL
+### SERVERLESS DEVELOPER PORTAL
 
-AWS offers this free open source project as starting point to build your developer experience.
-
-![My image](https://d2908q01vomqb2.cloudfront.net/1b6453892473a467d07372d45eb05abc2031647a/2019/02/08/dev-portal-arch.png)
+AWS offers this free open source project as starting point to build your developer experience. It's build on top of DynamoDB, Lambda, Cognito and S3.
 
 References:
 
-<a href="https://github.com/awslabs/aws-api-gateway-developer-portal" target="_blank" class="ui button">
-  <i class="github icon"></i>
-  Github
-</a>
-<a href="https://aws.amazon.com/blogs/compute/deploying-a-personalized-api-gateway-serverless-developer-portal/" target="_blank" class="ui button">
-  AWS BLOG
-</a>
+<a href="https://github.com/awslabs/aws-api-gateway-developer-portal" target="_blank" class="ui button"><i class="github icon"></i>Github</a>
+<a href="https://aws.amazon.com/blogs/compute/deploying-a-personalized-api-gateway-serverless-developer-portal/" target="_blank" class="ui button">AWS BLOG</a>
+
+### The Serverless API Management platform by AWS
+![Overview](custom-content/apim-overview.jpg)
 
 ### LET'S GET IN TOUCH
 Let's build your internal and external developer experience. 
